@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Stat : MonoBehaviour
@@ -90,6 +91,26 @@ public class Stat : MonoBehaviour
    
     }
 
+    public virtual void OnAttacked(Stat attacker)
+    {
+        int dmaage = Mathf.Max(0, attacker.Attack - Defense);
+        Hp -= dmaage;
+        if (Hp <= 0)
+        {
+            Hp = 0;
+            OnDead(attacker);
+        }
+    }
+
+    protected virtual void OnDead(Stat attacker)
+    {
+        PlayerStat playerStat = attacker as PlayerStat;
+        if (playerStat != null)
+        {
+            playerStat.Exp += 15;
+        }
+        Managers.Game.Despwan(gameObject);
+    }
     // Update is called once per frame
     void Update()
     {

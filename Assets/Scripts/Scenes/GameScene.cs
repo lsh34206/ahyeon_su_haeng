@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,16 @@ public class GameScene : BaseScene
 
         GameObject player = Managers.Game.Spwan(Define.WorldObject.Player, "UnityChan");
      Camera.main.gameObject.GetOrAddComponent<CameraController>().SetPlayer(player);
-        Managers.Game.Spwan(Define.WorldObject.Monster, "Knight");
+       // Managers.Game.Spwan(Define.WorldObject.Monster, "Knight");
+       GameObject go = new GameObject { name = "SpawningPool" };
+       SpawningPool pool = go.GetOrAddComponent<SpawningPool>();
+       pool.SetKeepMonsterCount(5);
+
+    }
+
+     void Start()
+    {
+        Managers.Sound.Play("/Sounds/nd.mp3", Define.Sound.Bgm);
     }
 
     public override void Clear()

@@ -104,18 +104,16 @@ public class PlayerController : BaseController
     }
 
     private CursorType _cursorType = CursorType.None;
-
+    public AudioClip at;
+    public AudioSource ats;
 
     void OnHitEvent()
     {
+        ats.Play();
         if (_lookTarget != null)
         {
             Stat targetStat = _lookTarget.GetComponent<Stat>();
-            PlayerStat myStat = gameObject.GetComponent<PlayerStat>();
-
-            int damage = Mathf.Max(0, myStat.Attack - targetStat.Defense);
-            Debug.Log(damage);
-            targetStat.Hp -= damage;
+           targetStat.OnAttacked(_stat);
         }
 
         if (_stopSkill)
@@ -126,6 +124,7 @@ public class PlayerController : BaseController
         {State = Define.State.Moving;
             
         }
+        Managers.Sound.Play("/Sounds/univ0001.wav", Define.Sound.Effect);
     }
     protected override void UpdateSkill()
     {
@@ -171,6 +170,7 @@ public class PlayerController : BaseController
             }
         }
         Vector3 dir = _destPos - transform.position;
+        dir.y = 0;
         if (dir.magnitude < 0.1f)
         {
             State = Define.State.Idle;
